@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const connection = require('../connection')
 
 router.get('/', function(req, res) {
-    res.send('Birds home page');
+    connection.execute('SELECT * FROM user',(err, results) => {
+        if(!err){
+            res.send(results)
+        }
+        else{
+            console.log(err)
+        }
+    })
 });
 
 module.exports = router;
