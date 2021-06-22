@@ -13,4 +13,11 @@ router.get('/', function(req, res) {
     })
 });
 
+router.get('/:id', function(req,res) {
+    const id = req.params.id
+    connection.execute('SELECT * FROM shop WHERE shop.id_shop = ?', [id], (err, results) => {
+        res.send(results)
+    })    
+})
+
 module.exports = router;
