@@ -3,13 +3,13 @@ const mysql = require('mysql2');
 const express = require('express')
 const app = express()
 const port = 3000
-
+const shop = require('./routes/shopRoute')
 // create the connection to database
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password:`${process.env.PASSWORD_DB}`,
-  database: 'testDB'
+    host: 'localhost',
+    user: 'root',
+    password:`${process.env.PASSWORD_DB}`,
+    database: 'myShoppy'
 });
 
 connection.connect(err => {
@@ -19,16 +19,8 @@ connection.connect(err => {
         console.log("connection failed")
     }
 })
-app.get('/', (req, res) => {
-    connection.execute("SELECT * FROM testTable",(err,rows, fields) => {
-        if(!err){
-            res.send(rows)
-        }
-        else{
-            console.log(err)
-        }
-    })
-})
+
+app.use('/shop', shop)
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
