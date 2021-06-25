@@ -30,7 +30,10 @@ router.post('/', async function (req, res) {
 router.get('/login', async function (req,res) {
     const { login, password } = req.body
     const user = await connection.execute(`SELECT * FROM user WHERE user.login =${login}`)
-    console.log(user)
-    // bcrypt.compare(password,)
+    const passwordCorrect = bcrypt.compare(password,user.password)
+    if(!(user && passwordCorrect)){
+        res.sendStatus(401).json({error: 'invalid username or password'})
+    }
+    //TODO: End with token 
 })
 module.exports = router;
