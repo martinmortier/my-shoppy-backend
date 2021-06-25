@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const shop = require('./routes/shopRoute')
 const user = require('./routes/userRoute')
 const category = require('./routes/categoryRoute')
+const product = require('./routes/productRoute')
 
 const app = express()
 const port = 3000
@@ -14,6 +15,7 @@ app.use(bodyParser.json())
 app.use('/shop', shop)
 app.use('/user', user)
 app.use('/category', category)
+app.use('/product', product)
 
 
 app.listen(port, () => {

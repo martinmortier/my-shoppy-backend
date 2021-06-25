@@ -4,7 +4,14 @@ const connection = require('../connection')
 
 //Get all rows of category
 router.get('/', function (req, res) {
-    res.send('John doe')
+    connection.execute('SELECT * FROM category', function (err, results) {
+        if(!err){
+            res.send(results)
+        }
+        else{
+            console.log(err)
+        }
+    })
 })
 
 //Insert row in category
