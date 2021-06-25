@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../connection')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 router.get('/', function(req, res) {
     connection.execute('SELECT * FROM user',(err, results) => {
@@ -29,11 +30,21 @@ router.post('/', async function (req, res) {
 
 router.get('/login', async function (req,res) {
     const { login, password } = req.body
-    const user = await connection.execute(`SELECT * FROM user WHERE user.login =${login}`)
-    const passwordCorrect = bcrypt.compare(password,user.password)
-    if(!(user && passwordCorrect)){
-        res.sendStatus(401).json({error: 'invalid username or password'})
-    }
-    //TODO: End with token 
+    console.log(login)
+    connection.execute('SELECT * FROM user WHERE user.login = ?', [login], function ( err, results) {
+        if(!(user && passwordCorrect)){
+            res.sendStatus(401).json({error: 'invalid username or password'})
+        }
+        const userForToken = {
+            id: user.user_id,
+            login: user.login,
+            shop_id: user.id
+        }
+        //TODO: End with token 
+        const token = jwt.sign(userForToken,process.env.SECRET)
+        res.sendStatus(200).send({token, login: user.login})
+    })
+    // const passwordCorrect = await bcrypt.compare(password,user.password)
+    
 })
 module.exports = router;

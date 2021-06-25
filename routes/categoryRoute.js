@@ -28,7 +28,7 @@ router.post('/', function(req, res) {
         })
     }
     else{
-        res.sendStatus(400)
+        res.sendStatus(400).json({error: 'sho_id or name invalid'})
     }
 });
 
