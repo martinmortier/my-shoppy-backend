@@ -21,30 +21,30 @@ router.post('/', async function (req, res) {
     console.log(passwordHashed)
     connection.execute('INSERT INTO user (login,password,shop_id) VALUES (?,?,?)', [login, passwordHashed, shop_id], function (err, result){
         if(!err){
-            res.sendStatus(200).send(`User ${login} added`)
+            res.status(200).send(`User ${login} added`)
         }else{
             console.log(err) 
         }
     })
 })
 
-router.get('/login', async function (req,res) {
+//TODO: Refactor in promise
+router.post('/login', async function (req,res) {
     const { login, password } = req.body
-    console.log(login)
     connection.execute('SELECT * FROM user WHERE user.login = ?', [login], function ( err, results) {
+        const user = results[0]
+        const passwordCorrect = bcrypt.compare(password,user.password)
         if(!(user && passwordCorrect)){
-            res.sendStatus(401).json({error: 'invalid username or password'})
+            res.status(401).json({error: 'invalid username or password'})
         }
         const userForToken = {
             id: user.user_id,
             login: user.login,
             shop_id: user.id
         }
-        //TODO: End with token 
-        const token = jwt.sign(userForToken,process.env.SECRET)
-        res.sendStatus(200).send({token, login: user.login})
+        const token = jwt.sign(userForToken,process.env.SECRET_JWT)
+        res.status(200).send({token, login: user.login})
     })
-    // const passwordCorrect = await bcrypt.compare(password,user.password)
     
 })
 module.exports = router;

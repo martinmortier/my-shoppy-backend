@@ -32,8 +32,4 @@ router.post('/', function(req, res) {
     }
 });
 
-// router.get('/:id', function(req, res) {
-//     req.
-// })
-
 module.exports = router;
