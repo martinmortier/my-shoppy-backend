@@ -32,10 +32,13 @@ router.post('/', async function (req, res) {
 router.post('/login', async function (req,res) {
     const { login, password } = req.body
     connection.execute('SELECT * FROM user WHERE user.login = ?', [login], function ( err, results) {
+        if(err || results.length === 0){
+            res.status(404).json({error: 'user not found'})
+        }
         const user = results[0]
         const passwordCorrect = bcrypt.compare(password,user.password)
         if(!(user && passwordCorrect)){
-            res.status(401).json({error: 'invalid username or password'})
+           res.status(401).json({error: 'invalid username or password'})
         }
         const userForToken = {
             id: user.user_id,
