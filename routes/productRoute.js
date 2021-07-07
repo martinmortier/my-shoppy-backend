@@ -3,7 +3,15 @@ const router = express.Router();
 const connection = require('../connection')
 
 router.get('/', function(req, res) {
-   connection.execute("SELECT * FROM product", function (err, result) {
+    const { query } = req;
+    let sqlFilter = ''
+    if(query) {
+        sqlFilter += 'WHERE '
+        Object.entries(query).forEach(item => {
+            sqlFilter += `${item[0]} = ${item[1]}`
+        }) 
+    }
+   connection.execute(`SELECT * FROM product ${sqlFilter}`, function (err, result) {
         if(!err){
             res.send(result)
         }
