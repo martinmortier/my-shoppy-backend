@@ -5,7 +5,7 @@ const connection = require('../connection')
 router.get('/', function(req, res) {
     const { query } = req;
     let sqlFilter = ''
-    if(query) {
+    if(Object.keys(query).length > 0) {
         sqlFilter += 'WHERE '
         Object.entries(query).forEach(item => {
             sqlFilter += `${item[0]} = ${item[1]}`
