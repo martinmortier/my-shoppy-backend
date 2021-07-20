@@ -14,12 +14,12 @@ router.get('/', function (req, res) {
     })
 })
 
-//Insert row in category
+//Insert data in Category table
 router.post('/', function(req, res) {
-    const shop_id = req.body.shop_id
+    const id_shop = req.body.id_shop
     const name = req.body.name
-    if(name && shop_id){
-        connection.execute("INSERT INTO category (name, shop_id) VALUES (?,?)",[name,shop_id], (err, results) => {
+    if(name && id_shop){
+        connection.execute("INSERT INTO category (name, id_shop) VALUES (?,?)",[name,id_shop], (err, results) => {
             if(!err){
                 res.status(200).send(`Category ${name} added`)
             }else{
@@ -28,7 +28,7 @@ router.post('/', function(req, res) {
         })
     }
     else{
-        res.sendStatus(400).json({error: 'sho_id or name invalid'})
+        res.sendStatus(400).json({error: 'id_shop or name invalid'})
     }
 });
 

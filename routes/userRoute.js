@@ -28,7 +28,6 @@ router.post('/', async function (req, res) {
     })
 })
 
-//TODO: Refactor in promise
 router.post('/login', async function (req,res) {
     const { login, password } = req.body
     connection.execute('SELECT * FROM user WHERE user.login = ?', [login], function ( err, results) {
@@ -38,15 +37,15 @@ router.post('/login', async function (req,res) {
         const user = results[0]
         const passwordCorrect = bcrypt.compare(password,user.password)
         if(!(user && passwordCorrect)){
-           res.status(401).json({error: 'invalid username or password'})
+            res.status(401).json({error: 'invalid username or password'})
         }
         const userForToken = {
             id: user.user_id,
             login: user.login,
-            shop_id: user.id
+            id_shop: user.id
         }
         const token = jwt.sign(userForToken,process.env.SECRET_JWT)
-        res.status(200).send({token, login: user.login})
+        res.status(200).send({token, login: user.login, id_shop: user.id_shop})
     })
     
 })
