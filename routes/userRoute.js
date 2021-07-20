@@ -16,10 +16,10 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', async function (req, res) {
-    const { login, password, shop_id } = req.body
+    const { login, password, id_shop } = req.body
     const passwordHashed = await bcrypt.hash(password, 10)
     console.log(passwordHashed)
-    connection.execute('INSERT INTO user (login,password,shop_id) VALUES (?,?,?)', [login, passwordHashed, shop_id], function (err, result){
+    connection.execute('INSERT INTO user (login,password,id_shop) VALUES (?,?,?)', [login, passwordHashed, id_shop], function (err, result){
         if(!err){
             res.status(200).send(`User ${login} added`)
         }else{
